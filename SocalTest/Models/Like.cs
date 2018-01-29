@@ -1,6 +1,6 @@
-﻿namespace SocalTest.Models
+﻿namespace SocialTest.Models
 {
-    public class Likes
+    public class Like
     {
         public int PostId { get; set; }
         public int UserId { get; set; }

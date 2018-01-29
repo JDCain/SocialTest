@@ -1,4 +1,4 @@
-﻿namespace SocalTest.Models
+﻿namespace SocialTest.Models
 {
     public class User
     {

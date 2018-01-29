@@ -1,6 +1,6 @@
-﻿namespace SocalTest.Models
+﻿namespace SocialTest.Models
 {
-    public class Friends
+    public class Friend
     {
         public int Id0 { get; set; }
         public int Id1 { get; set; }

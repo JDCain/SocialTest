@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
-using SocalTest.Models;
+using SocialTest.Models;
 
-namespace SocalTest.DataModel
+namespace SocialTest.DataModel
 {
     public class SocialContext:DbContext
     {

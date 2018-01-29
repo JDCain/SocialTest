@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace SocalTest.Controllers
+namespace SocialTest.Controllers
 {
     public class DefaultController : Controller
     {
