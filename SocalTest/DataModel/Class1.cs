@@ -9,6 +9,11 @@ namespace SocialTest.DataModel
 {
     public class SocialContext:DbContext
     {
+
+        public SocialContext() : base("SocialContext")
+        {
+            
+        }
         public DbSet<User> Users { get; set; }
         public DbSet<Friend> Friends { get; set; }
         public DbSet<Like> Likes { get; set; }
