@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace SocalTest.Models
+﻿namespace SocalTest.Models
 {
     public class Likes
     {
+        public int PostId { get; set; }
+        public int UserId { get; set; }
     }
 }

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace SocalTest.Models
+﻿namespace SocalTest.Models
 {
     public class Friends
     {
+        public int Id0 { get; set; }
+        public int Id1 { get; set; }
     }
 }
