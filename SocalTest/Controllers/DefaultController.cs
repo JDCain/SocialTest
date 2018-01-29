@@ -11,6 +11,7 @@ namespace SocalTest.Controllers
         // GET: Default
         public ActionResult Index()
         {
+            ViewBag.Title = "Default";
             return View();
         }
     }
