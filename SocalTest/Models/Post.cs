@@ -2,10 +2,10 @@
 
 namespace SocalTest.Models
 {
-    public class Posts
+    public class Post
     {
         public int UserId { get; set; }
-        public string Post { get; set; }
+        public string Text { get; set; }
         public DateTime Posted { get; set; }
 
     }

@@ -155,13 +155,14 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
+    <Compile Include="DataModel\Class1.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Friends.cs" />
-    <Compile Include="Models\Likes.cs" />
-    <Compile Include="Models\Messages.cs" />
-    <Compile Include="Models\Posts.cs" />
+    <Compile Include="Models\Friend.cs" />
+    <Compile Include="Models\Like.cs" />
+    <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\Post.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
