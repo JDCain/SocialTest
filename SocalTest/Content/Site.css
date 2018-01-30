@@ -6,3 +6,9 @@
     line-height: 60px;
     background-color: #f5f5f5;
 }
+html .required label:after {
+    content: "*";
+    font-weight: bold;
+    color: red; }
+html .validation-summary-valid.alert-danger {
+    display: none; }

@@ -35,21 +35,15 @@ namespace SocialTest.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public ActionResult Login()
+        public ActionResult Login(string redirect)
         {
-            var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Name, "Test"));
-            claims.Add(new Claim(ClaimTypes.Email, "test@test.com"));
-            var id = new ClaimsIdentity(claims,
-                DefaultAuthenticationTypes.ApplicationCookie);
-
-            Request.GetOwinContext().Authentication.SignIn(id);
             return View();
         }
 
+        [ValidateAntiForgeryToken]
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Login(string test)
+        public ActionResult Login(LoginInfo modeLogin)
         {
             if (!ModelState.IsValid)
                 return View();
@@ -58,12 +52,23 @@ namespace SocialTest.Controllers
             {
 
             }
+            //var claims = new List<Claim>
+            //{
+            //    new Claim(ClaimTypes.Name, "Test"),
+            //    new Claim(ClaimTypes.Email, "test@test.com")
+            //};
+            //var id = new ClaimsIdentity(claims,
+            //    DefaultAuthenticationTypes.ApplicationCookie);
+
+            //Request.GetOwinContext().Authentication.SignIn(id);
             return View();
         }
 
-        public void Logoff()
+        [AllowAnonymous]
+        public ActionResult Logoff()
         {
             Request.GetOwinContext().Authentication.SignOut();
+            return RedirectToAction("Index", "Default");
         }
     }
 }
