@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -14,26 +15,27 @@ namespace SocialTest.Controllers
 {
     public class DefaultController : Controller
     {
-        
         public ActionResult Index()
         {
+            List<PostDisplay> postsList = null;
             var identity = (ClaimsIdentity)User.Identity;
             var id = identity.Claims.FirstOrDefault(x=>x.Value == "Id");
             var result = int.TryParse(id?.ValueType, out var intOut);
             if (result)
             {
+                
                 using (var db = new SocialContext())
                 {
                     var query = db.Friends.Where(x => x.UserId0 == intOut);
                     var innerJoinQuery =
                         from post in db.Posts
                         join friend in db.Friends on post.UserId equals friend.UserId0
-                        select new { post.Text, User = db.Users.FirstOrDefault(x=>x.Id == post.UserId).Name }; //produces flat sequence
-                    var test = innerJoinQuery.ToList();
+                        select new PostDisplay() { Text = post.Text, User = db.Users.FirstOrDefault(x=>x.Id == post.UserId).Name, Posted = post.Posted }; //produces flat sequence
+                    postsList = innerJoinQuery.ToList();
                 }
             }
             ViewBag.Title = "Default";
-            return View();
+            return View(postsList);
         }
 
         [AllowAnonymous]

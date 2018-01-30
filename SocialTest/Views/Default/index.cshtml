@@ -1,6 +1,15 @@
-﻿@{
-    ViewBag.Title = "index";
+﻿@model List<SocialTest.Models.PostDisplay>
+@{
+    ViewBag.Title = "Posts";
 }
 
-<h2>index</h2>
-
+<h2>@ViewBag.Title</h2>
+<div class="container">
+    @foreach ( var post in Model)
+    {
+        <blockquote class="blockquote">
+            <p class="mb-0">@post.Text</p>
+            <footer class="blockquote-footer">@post.User <cite title="Source Title">@post.Posted</cite></footer>
+        </blockquote>
+    }
+</div>
