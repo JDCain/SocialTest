@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using SocialTest.DataModel;
 using SocialTest.Models;
 
@@ -11,7 +12,7 @@ namespace SocialTest.Controllers
 {
     public class DefaultController : Controller
     {
-        // GET: Default
+        
         public ActionResult Index()
         {
             using (var db = new SocialContext())
@@ -32,7 +33,23 @@ namespace SocialTest.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        [HttpGet]
         public ActionResult Login()
+        {
+            var claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Name, "Test"));
+            claims.Add(new Claim(ClaimTypes.Email, "test@test.com"));
+            var id = new ClaimsIdentity(claims,
+                DefaultAuthenticationTypes.ApplicationCookie);
+
+            Request.GetOwinContext().Authentication.SignIn(id);
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult Login(string test)
         {
             if (!ModelState.IsValid)
                 return View();
@@ -42,6 +59,11 @@ namespace SocialTest.Controllers
 
             }
             return View();
+        }
+
+        public void Logoff()
+        {
+            Request.GetOwinContext().Authentication.SignOut();
         }
     }
 }
