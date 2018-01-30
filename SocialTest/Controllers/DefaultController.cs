@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -57,14 +58,14 @@ namespace SocialTest.Controllers
 
             using (var db = new SocialContext())
             {
-                var test = await db.Users.FirstOrDefaultAsync(x => x.Name == modeLogin.User);
-                if (test != null)
+                var verifyUser = await db.Users.FirstOrDefaultAsync(x => x.Name == modeLogin.User && x.Password == modeLogin.Password);
+                if (verifyUser != null)
                 {
                     var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Name, test.Name),
-                        new Claim(ClaimTypes.Email, test.Email),
-                        new Claim("Id", "Id", test.Id.ToString())
+                        new Claim(ClaimTypes.Name, verifyUser.Name),
+                        new Claim(ClaimTypes.Email, verifyUser.Email),
+                        new Claim("Id", "Id", verifyUser.Id.ToString())
                         
                     };
                     var id = new ClaimsIdentity(claims,
@@ -72,6 +73,11 @@ namespace SocialTest.Controllers
                     
                     Request.GetOwinContext().Authentication.SignIn(id);
                     RedirectToAction("Default", "index");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
+                    return View();
                 }
             }
 
@@ -83,6 +89,19 @@ namespace SocialTest.Controllers
         {
             Request.GetOwinContext().Authentication.SignOut();
             return RedirectToAction("Index", "Default");
+        }
+
+        [ChildActionOnly]
+        [AllowAnonymous]
+        public ActionResult UserMenu()
+        {
+            if (Thread.CurrentPrincipal is ClaimsPrincipal claimsPrincipal)
+            {
+                var name = claimsPrincipal.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault();
+                
+                ViewBag.Username = $"{name}";
+            }
+            return PartialView("_userMenu");
         }
     }
 }

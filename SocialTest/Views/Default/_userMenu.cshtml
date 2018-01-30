@@ -1,0 +1,17 @@
+﻿<ul class="navbar-nav ml-auto">
+    @if (!string.IsNullOrEmpty(ViewBag.Username))
+    {
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">@ViewBag.Username</a>
+            <div class="dropdown-menu">
+                @Html.ActionLink("Logoff", "Logoff", "Default", null, new {@class = "nav-item nav-link"})
+            </div>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            @Html.ActionLink("Login", "Login", "Default", null, new { @class = "nav-item nav-link" })
+        </li>
+    }
+</ul>

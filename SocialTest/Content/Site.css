@@ -12,3 +12,6 @@ html .required label:after {
     color: red; }
 html .validation-summary-valid.alert-danger {
     display: none; }
+#renderBody {
+    padding-top: 75px;
+}
