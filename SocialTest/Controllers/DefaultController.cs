@@ -26,12 +26,14 @@ namespace SocialTest.Controllers
                 
                 using (var db = new SocialContext())
                 {
-                    var query = db.Friends.Where(x => x.UserId0 == intOut);
-                    var innerJoinQuery =
-                        from post in db.Posts
-                        join friend in db.Friends on post.UserId equals friend.UserId0
+                    var query = db.Friends.Where(x => x.UserId0 == intOut).ToList();
+                    var joinQuery =
+                        from post in db.Posts                         
+                        join friend in db.Friends 
+                            on post.UserId equals friend.UserId1
+                        where friend.UserId0.Equals(intOut)
                         select new PostDisplay() { Text = post.Text, User = db.Users.FirstOrDefault(x=>x.Id == post.UserId).Name, Posted = post.Posted }; //produces flat sequence
-                    postsList = innerJoinQuery.ToList();
+                    postsList = joinQuery.OrderBy(x=>x.Posted).ToList();
                 }
             }
             ViewBag.Title = "Default";
