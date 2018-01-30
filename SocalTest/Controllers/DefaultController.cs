@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
@@ -15,19 +17,20 @@ namespace SocialTest.Controllers
         
         public ActionResult Index()
         {
-            using (var db = new SocialContext())
+            var identity = (ClaimsIdentity)User.Identity;
+            var id = identity.Claims.FirstOrDefault(x=>x.Value == "Id");
+            var result = int.TryParse(id?.ValueType, out var intOut);
+            if (result)
             {
-                //var user = new User { Name = "Name" };
-                //db.Users.Add(user);
-                //db.SaveChanges();
-                var query = from b in db.Users
-                    orderby b.Name
-                    select b;
-                foreach (var item in query)
+                using (var db = new SocialContext())
                 {
-                    
+                    var query = db.Friends.Where(x => x.UserId0 == intOut);
+                    var innerJoinQuery =
+                        from post in db.Posts
+                        join friend in db.Friends on post.UserId equals friend.UserId0
+                        select new { post.Text, User = db.Users.FirstOrDefault(x=>x.Id == post.UserId).Name }; //produces flat sequence
+                    var test = innerJoinQuery.ToList();
                 }
-                
             }
             ViewBag.Title = "Default";
             return View();
@@ -43,24 +46,31 @@ namespace SocialTest.Controllers
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Login(LoginInfo modeLogin)
+        public async Task<ActionResult> Login(LoginInfo modeLogin)
         {
             if (!ModelState.IsValid)
                 return View();
 
             using (var db = new SocialContext())
             {
-
+                var test = await db.Users.FirstOrDefaultAsync(x => x.Name == modeLogin.User);
+                if (test != null)
+                {
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, test.Name),
+                        new Claim(ClaimTypes.Email, test.Email),
+                        new Claim("Id", "Id", test.Id.ToString())
+                        
+                    };
+                    var id = new ClaimsIdentity(claims,
+                        DefaultAuthenticationTypes.ApplicationCookie);
+                    
+                    Request.GetOwinContext().Authentication.SignIn(id);
+                    RedirectToAction("Default", "index");
+                }
             }
-            //var claims = new List<Claim>
-            //{
-            //    new Claim(ClaimTypes.Name, "Test"),
-            //    new Claim(ClaimTypes.Email, "test@test.com")
-            //};
-            //var id = new ClaimsIdentity(claims,
-            //    DefaultAuthenticationTypes.ApplicationCookie);
 
-            //Request.GetOwinContext().Authentication.SignIn(id);
             return View();
         }
 

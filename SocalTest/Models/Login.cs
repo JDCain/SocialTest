@@ -11,6 +11,7 @@ namespace SocialTest.Models
         [Required]
         public string User { get; set; }
         [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
     }
 }
